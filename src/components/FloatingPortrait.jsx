@@ -52,7 +52,7 @@ export default function FloatingPortrait({ onMissing }) {
             fetchpriority="high"
             onError={fail}
           />
-          <span className="fp__scan" aria-hidden="true" style={{ '--mask': `url("${src}")` }} />
+          <span className="fp__scan" aria-hidden="true" style={{ '--mask': `url("${new URL(src, document.baseURI).href}")` }} />
         </div>
       </div>
       <div className="fp__ring fp__ring--front" aria-hidden="true" />

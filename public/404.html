@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page not found — MD Raju Howlader</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2304060f'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial Black' font-size='26' fill='%2300e0ff'%3ERH%3C/text%3E%3C/svg%3E" />
+  <style>
+    :root { --grad: linear-gradient(100deg, #00e0ff, #2f6bff 45%, #b08cff); }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      display: grid; place-items: center; overflow: hidden;
+      background: #04060f; color: #e9eefc;
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; text-align: center; padding: 1.5rem;
+    }
+    .glow { position: fixed; width: 70vmax; height: 70vmax; border-radius: 50%; background: radial-gradient(circle, rgba(122,60,255,.35), rgba(47,107,255,.15) 40%, transparent 70%); filter: blur(40px); animation: drift 10s ease-in-out infinite alternate; }
+    .ring { position: fixed; width: 46vmin; height: 46vmin; border-radius: 50%; border: 1px solid rgba(0,224,255,.35); box-shadow: 0 0 60px rgba(0,224,255,.15), inset 0 0 60px rgba(122,60,255,.15); animation: spin 20s linear infinite; }
+    .ring::after { content: ''; position: absolute; top: -5px; left: 50%; width: 10px; height: 10px; border-radius: 50%; background: #00e0ff; box-shadow: 0 0 16px #00e0ff; }
+    main { position: relative; }
+    .code { font-weight: 900; font-size: clamp(6rem, 26vw, 16rem); line-height: .85; letter-spacing: -.06em; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 0; }
+    h1 { font-size: clamp(1.4rem, 4vw, 2.2rem); margin: 1.2rem 0 .6rem; }
+    p { color: #8a93b2; max-width: 30rem; margin: 0 auto; line-height: 1.6; }
+    a.btn { display: inline-block; margin-top: 2rem; padding: 1rem 1.8rem; border-radius: 99px; background: var(--grad); color: #050816; font-weight: 700; text-decoration: none; transition: transform .3s; }
+    a.btn:hover { transform: translateY(-3px); }
+    .mono { font-family: ui-monospace, monospace; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: #8a93b2; margin-top: 2.5rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes drift { to { transform: translate(6%, -4%) scale(1.1); } }
+    @media (prefers-reduced-motion: reduce) { .glow, .ring { animation: none; } }
+  </style>
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+  <div class="ring" aria-hidden="true"></div>
+  <main>
+    <p class="code">404</p>
+    <h1>Lost in the digital space.</h1>
+    <p>The page you're looking for doesn't exist or has moved. Let's get you back to the portfolio.</p>
+    <a class="btn" id="home" href="/">Back to homepage</a>
+    <p class="mono">MD Raju Howlader · Founder of Khoka Tech</p>
+  </main>
+  <script>
+    // On GitHub Pages project sites the homepage is /<repo-name>/ — detect it.
+    (function () {
+      var host = location.hostname;
+      var parts = location.pathname.split('/').filter(Boolean);
+      if (host.endsWith('github.io') && parts.length && host.split('.')[0] + '.github.io' !== parts[0]) {
+        document.getElementById('home').href = '/' + parts[0] + '/';
+      }
+    })();
+  </script>
+</body>
+</html>

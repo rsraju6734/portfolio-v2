@@ -1,0 +1,11 @@
+node_modules
+dist
+.DS_Store
+*.log
+.env
+.env.*
+.claude/settings.local.json
+.venv
+__pycache__
+tools/photos/
+.claude/

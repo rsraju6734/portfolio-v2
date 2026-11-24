@@ -444,5 +444,5 @@ export const contact = {
    SEO — used in the page <head> (also edit index.html for crawlers)
    --------------------------------------------------------------------- */
 export const seo = {
-  siteUrl: 'https://rsraju6734.github.io/portfolio/',
+  siteUrl: 'https://rsraju6734.github.io/portfolio-v2/',
 }

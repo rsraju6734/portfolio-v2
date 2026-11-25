@@ -1,7 +1,7 @@
 # MD Raju Howlader — Portfolio
 
 Personal portfolio of **MD Raju Howlader**, Founder of **Khoka Tech**.
-Built with React + Vite, GSAP animations, Lenis smooth scrolling and a Three.js 3D hero.
+Dark editorial design (black, crimson, cream) built with React + Vite, GSAP animations and Lenis smooth scrolling.
 It is a fully static site — free to host on GitHub Pages, no server, no paid APIs, no secret keys.
 
 ---
@@ -20,6 +20,7 @@ You can update:
 | What | Where in `site.js` |
 |---|---|
 | Name, titles, tagline, email, WhatsApp, photo | `profile` |
+| Big editorial headlines (cream + red words) | `editorial` |
 | About text, goals, journey timeline | `about` |
 | Animated numbers (verified numbers only!) | `stats` |
 | Khoka Tech text, logo, website & Facebook links | `khokaTech` |
@@ -132,11 +133,11 @@ The endpoint is a public URL, not a password — it is safe in your code.
 ├── src/
 │   ├── config/site.js       ← ALL YOUR CONTENT
 │   ├── App.jsx              page layout (section order)
-│   ├── sections/            Hero, About, KhokaTech, Skills, Projects, Research,
-│   │                        Services, Process, Contact (+ Socials, Footer)
-│   ├── components/          3D scene, nav/menu, loader, cursor, icons, buttons
+│   ├── sections/            Hero, Approach, Founder, Services, Difference, Toolkit,
+│   │                        Projects, Research, Method, Proof, Contact (+ Footer)
+│   ├── components/          nav/menu, loader, cursor, icons, buttons
 │   ├── lib/                 animation helpers (GSAP, Lenis, scroll reveals)
-│   └── styles/              base.css (design system), sections.css
+│   └── styles/              base.css (design system), editorial.css (sections)
 └── .github/workflows/       automatic GitHub Pages deployment
 ```
 
@@ -146,8 +147,6 @@ Colours and fonts are defined at the top of `src/styles/base.css` (`:root { ... 
 
 ## 6. Performance & accessibility
 
-- The 3D scene pauses when it is off-screen or the tab is hidden, uses fewer particles on
-  phones, and caps the pixel ratio.
 - Visitors with **"reduce motion"** enabled get a calm version: no smooth scroll, no intro,
   static 3D frame.
 - Custom cursor and tilt effects only run on devices with a mouse.

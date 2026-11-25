@@ -6,13 +6,14 @@ import Icon from './Icon'
 
 export const sections = [
   { id: 'home', label: 'Home', hint: 'Start' },
-  { id: 'about', label: 'About', hint: 'Story & journey' },
+  { id: 'about', label: 'About', hint: 'The approach' },
   { id: 'khoka-tech', label: 'Khoka Tech', hint: 'My company' },
-  { id: 'skills', label: 'Skills', hint: 'Expertise' },
+  { id: 'services', label: 'Services', hint: 'What I do' },
+  { id: 'skills', label: 'Skills', hint: 'The toolkit' },
   { id: 'work', label: 'Work', hint: 'Projects' },
   { id: 'research', label: 'Research', hint: 'Data case studies' },
-  { id: 'services', label: 'Services', hint: 'How I help' },
-  { id: 'process', label: 'Process', hint: 'How I work' },
+  { id: 'method', label: 'Method', hint: 'How I work' },
+  { id: 'proof', label: 'Proof', hint: 'Profiles & links' },
   { id: 'contact', label: 'Contact', hint: "Let's talk" },
 ]
 
@@ -128,7 +129,7 @@ export default function Nav() {
         </div>
 
         <nav className="nav__links" aria-label="Primary">
-          {sections.filter((s) => ['about', 'khoka-tech', 'work', 'services'].includes(s.id)).map((s) => (
+          {sections.filter((s) => ['about', 'services', 'work', 'khoka-tech', 'contact'].includes(s.id)).map((s) => (
             <a key={s.id} href={`#${s.id}`} onClick={(e) => navigate(e, s.id)} className={active === s.id ? 'is-active' : ''} data-cursor="hover">{s.label}</a>
           ))}
         </nav>

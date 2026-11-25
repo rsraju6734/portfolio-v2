@@ -5,14 +5,16 @@ import Loader from './components/Loader'
 import Cursor from './components/Cursor'
 import Nav from './components/Nav'
 import Hero from './sections/Hero'
-import About, { Marquee } from './sections/About'
-import KhokaTech from './sections/KhokaTech'
-import Skills from './sections/Skills'
+import Approach from './sections/Approach'
+import Founder from './sections/Founder'
+import Services from './sections/Services'
+import Difference from './sections/Difference'
+import Toolkit from './sections/Toolkit'
 import Projects from './sections/Projects'
 import Research from './sections/Research'
-import Services from './sections/Services'
-import Process from './sections/Process'
-import Contact, { Socials, Footer } from './sections/Contact'
+import Method from './sections/Method'
+import Proof from './sections/Proof'
+import Contact, { Footer } from './sections/Contact'
 
 export default function App() {
   const [ready, setReady] = useState(false)
@@ -38,19 +40,19 @@ export default function App() {
       <a href="#main" className="skip-link">Skip to content</a>
       <Loader onDone={onLoaded} />
       <Cursor />
-      <div className="noise" aria-hidden="true" />
+      <div className="grain" aria-hidden="true" />
       <Nav />
       <main id="main" className={ready ? 'is-ready' : ''}>
         <Hero ready={ready} />
-        <Marquee />
-        <About />
-        <KhokaTech />
-        <Skills />
+        <Approach />
+        <Founder />
+        <Services />
+        <Difference />
+        <Toolkit />
         <Projects />
         <Research />
-        <Services />
-        <Process />
-        <Socials />
+        <Method />
+        <Proof />
         <Contact />
       </main>
       <Footer />

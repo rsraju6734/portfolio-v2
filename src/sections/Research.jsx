@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { gsap, reducedMotion } from '../lib/motion'
-import { research } from '../config/site'
-import { Eyebrow, SplitText } from '../components/ui'
+import { research, editorial } from '../config/site'
+import { SectionLabel, Statement } from '../components/ui'
 import Icon from '../components/Icon'
 
 const letters = 'ABCDEFGH'
@@ -59,8 +59,8 @@ export default function Research() {
     <section className="section research" id="research" ref={root}>
       <div className="container">
         <div className="research__head">
-          <Eyebrow index="05">Data research portfolio</Eyebrow>
-          <SplitText as="h2" className="h-display" text="Research case studies" />
+          <SectionLabel n="07">{editorial.research.label}</SectionLabel>
+          <Statement lead={editorial.research.lead} accent={editorial.research.accent} size="xl" />
           <p className="muted" data-reveal>{research.intro}</p>
           <div className="research__tools" data-reveal>
             {research.tools.map((t) => <span key={t} className="tool-tag"><Icon name="sheet" size={16} />{t}</span>)}
@@ -87,9 +87,9 @@ export default function Research() {
               </article>
             ))}
             <article className="case case--end">
-              <p className="mono-label">Need data like this?</p>
+              <p className="label-sm">Need data like this?</p>
               <h3 className="case__title">Clean, verified spreadsheets — delivered in your format.</h3>
-              <a href="#contact" className="link-arrow" data-cursor="hover">Start a research project <Icon name="arrow" size={16} /></a>
+              <a href="#contact" className="link-red" data-cursor="hover">Start a research project <Icon name="arrow" size={16} /></a>
             </article>
           </div>
         </div>

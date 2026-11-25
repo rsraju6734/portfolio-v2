@@ -1,45 +1,7 @@
 import { useState } from 'react'
-import { profile, socials, contact } from '../config/site'
-import { Eyebrow, SplitText, Magnetic, hasLink, ext, Button } from '../components/ui'
-import Icon, { brandColor } from '../components/Icon'
-
-export function Socials() {
-  const list = socials.filter((s) => hasLink(s.url))
-  return (
-    <section className="section socials" id="connect">
-      <div className="container">
-        <div className="socials__head">
-          <Eyebrow index="08">Connect</Eyebrow>
-          <SplitText as="h2" className="h-display" text="Find me online" />
-          <p className="muted" data-reveal>Professional profiles, freelance platforms and the Khoka Tech page — all in one place.</p>
-        </div>
-        <ul className="socials__grid" data-stagger>
-          {list.map((s) => (
-            <li key={s.name}>
-              <Magnetic
-                href={s.url}
-                {...(s.url.startsWith('mailto:') ? {} : ext)}
-                className="social"
-                style={{ '--brand': brandColor[s.icon] || '#2f6bff' }}
-                strength={0.2}
-                data-cursor="hover"
-                aria-label={`${s.name}${s.note ? ` (${s.note})` : ''} — opens ${s.url.startsWith('mailto:') ? 'your email app' : 'in a new tab'}`}
-              >
-                <span className="social__icon"><Icon name={s.icon} size={26} /></span>
-                <span className="social__text">
-                  <strong>{s.name}</strong>
-                  <small>{s.handle}</small>
-                </span>
-                {s.note && <span className="social__note">{s.note}</span>}
-                <span className="social__arrow"><Icon name="arrowUpRight" size={18} /></span>
-              </Magnetic>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  )
-}
+import { profile, socials, contact, khokaTech, editorial } from '../config/site'
+import { SectionLabel, Statement, hasLink, ext, Button } from '../components/ui'
+import Icon from '../components/Icon'
 
 const empty = { name: '', email: '', subject: '', message: '' }
 
@@ -95,12 +57,11 @@ export default function Contact() {
 
   return (
     <section className="section contact" id="contact">
-      <div className="contact__aura" aria-hidden="true" />
       <div className="container contact__grid">
         <div className="contact__info">
-          <Eyebrow index="09">Contact</Eyebrow>
-          <SplitText as="h2" className="h-display" text={contact.heading} />
-          <p className="muted" data-reveal>{contact.text}</p>
+          <SectionLabel n="10">{editorial.contact.label}</SectionLabel>
+          <Statement lead={editorial.contact.lead} accent={editorial.contact.accent} size="xl" />
+          <p className="contact__text" data-reveal>{contact.text}</p>
 
           <div className="contact__direct" data-stagger>
             <a href={`mailto:${profile.email}`} className="contact__line" data-cursor="hover">
@@ -117,7 +78,7 @@ export default function Contact() {
           </div>
         </div>
 
-        <div className="contact__card glass" data-reveal="right">
+        <div className="contact__card" data-reveal="right">
           {state === 'sent' || state === 'demo' ? (
             <div className="contact__done" role="status">
               <span className={`contact__done-icon ${state === 'demo' ? 'is-demo' : ''}`}><Icon name={state === 'demo' ? 'info' : 'check'} size={34} /></span>
@@ -125,7 +86,7 @@ export default function Contact() {
                 <>
                   <h3>Message sent — thank you!</h3>
                   <p className="muted">I've received your message and will reply to your email as soon as possible.</p>
-                  <Button onClick={() => setState('idle')} variant="ghost" icon="arrow">Send another</Button>
+                  <Button onClick={() => setState('idle')} variant="line" icon="arrow">Send another</Button>
                 </>
               ) : (
                 <>
@@ -136,7 +97,7 @@ export default function Contact() {
                   </p>
                   <div className="contact__done-actions">
                     <Button href={mailto} icon="email">Send via email app</Button>
-                    <Button onClick={() => setState('idle')} variant="ghost" icon="arrow">Edit message</Button>
+                    <Button onClick={() => setState('idle')} variant="line" icon="arrow">Edit message</Button>
                   </div>
                 </>
               )}
@@ -144,7 +105,7 @@ export default function Contact() {
           ) : (
             <form className="form" onSubmit={submit} noValidate>
               <div className="form__head">
-                <p className="mono-label">Send a message</p>
+                <p className="label-sm">Send a message</p>
                 {demo && <span className="badge badge--demo" title="No form service connected yet">Demo mode</span>}
               </div>
               <div className="form__row">
@@ -170,19 +131,32 @@ export default function Contact() {
 
 export function Footer() {
   const year = new Date().getFullYear()
+  const links = [['About', '#about'], ['Khoka Tech', '#khoka-tech'], ['Services', '#services'], ['Work', '#work'], ['Contact', '#contact']]
+  const pick = (icon) => socials.find((s) => s.icon === icon && hasLink(s.url))
+  const social = ['github', 'linkedin', 'fiverr', 'upwork', 'facebook', 'whatsapp'].map(pick).filter(Boolean)
   return (
     <footer className="footer">
-      <div className="container">
-        <div className="footer__top">
-          <p className="footer__tagline serif">{profile.tagline}</p>
-          <a href="#home" className="footer__top-btn" data-cursor="hover" aria-label="Back to top"><Icon name="arrow" size={20} /></a>
-        </div>
-        <p className="footer__giant" aria-hidden="true">RAJU HOWLADER</p>
-        <div className="footer__bottom">
-          <span>© {year} {profile.name}</span>
-          <span>Founder of Khoka Tech</span>
-          <span>{profile.location}</span>
-        </div>
+      <div className="footer__top">
+        <Button href="#contact" variant="dark">Let's talk</Button>
+        <nav className="footer__nav" aria-label="Footer">
+          {links.map(([l, h]) => <a key={h} href={h} data-cursor="hover">{l}</a>)}
+        </nav>
+      </div>
+      <div className="footer__mid">
+        <p className="footer__tagline">{profile.tagline}</p>
+        <ul className="footer__social">
+          {social.map((s) => (
+            <li key={s.name}><a href={s.url} {...ext} aria-label={s.name} data-cursor="hover"><Icon name={s.icon} size={18} /></a></li>
+          ))}
+          <li><a href={`mailto:${profile.email}`} aria-label="Email" data-cursor="hover"><Icon name="email" size={18} /></a></li>
+        </ul>
+      </div>
+      <p className="footer__giant" aria-hidden="true">{profile.shortName.toUpperCase()}</p>
+      <div className="footer__bottom">
+        <span>© {year} {profile.name}</span>
+        <a href={khokaTech.website} {...ext}>Founder · {khokaTech.name}</a>
+        <span>{profile.location}</span>
+        <a href="#home" data-cursor="hover">Back to top ↑</a>
       </div>
     </footer>
   )

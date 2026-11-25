@@ -1,38 +1,46 @@
 import { Fragment, useEffect, useRef } from 'react'
-import { gsap, isTouch, reducedMotion, splitChars } from '../lib/motion'
+import { gsap, isTouch, reducedMotion } from '../lib/motion'
 import Icon from './Icon'
 
-/** Heading whose characters animate in one by one (see lib/reveals.js). */
-export function SplitText({ text, as: Tag = 'span', className = '', ...rest }) {
+/** Splits text into words that rise out of a mask (see lib/reveals.js). */
+export function Words({ text, className = '' }) {
   return (
-    <Tag className={`split ${className}`} data-split aria-label={text} {...rest}>
-      {splitChars(text).map((w, i) => (
+    <span className={`words ${className}`} aria-label={text}>
+      {text.split(' ').map((w, i, arr) => (
         <Fragment key={i}>
-          <span className="word" aria-hidden="true">
-            {w.chars.map((c, j) => (
-              <span className="ch-wrap" key={j}><span className="ch">{c}</span></span>
-            ))}
-          </span>
-          {w.space && ' '}
+          <span className="w" aria-hidden="true"><span className="wi">{w}</span></span>
+          {i < arr.length - 1 && ' '}
         </Fragment>
       ))}
+    </span>
+  )
+}
+
+/**
+ * The editorial statement: condensed cream lead + oversized red accent that
+ * overlaps the line above it — e.g. "WEBSITES AREN'T ABOUT / CODE."
+ */
+export function Statement({ lead, accent, as: Tag = 'h2', size = 'xl', className = '', accentStyle = 'cond' }) {
+  return (
+    <Tag className={`statement statement--${size} ${className}`} data-words>
+      {lead && <span className="statement__lead"><Words text={lead} /></span>}
+      {accent && <span className={`statement__accent statement__accent--${accentStyle}`}><Words text={accent} /></span>}
     </Tag>
   )
 }
 
-/** Section eyebrow label, e.g. "02 — About" */
-export function Eyebrow({ index, children }) {
+/** Section label:  / 01 — THE APPROACH  with a short rule underneath. */
+export function SectionLabel({ n, children }) {
   return (
-    <p className="eyebrow" data-reveal>
-      {index && <span className="eyebrow__num">{index}</span>}
-      <span className="eyebrow__line" />
-      <span>{children}</span>
-    </p>
+    <div className="slabel" data-reveal="left">
+      <p><span className="slabel__slash">/</span> {n} <span className="slabel__dash">—</span> <span className="slabel__txt">{children}</span></p>
+      <span className="slabel__rule" />
+    </div>
   )
 }
 
 /** Buttons / links that are gently pulled toward the cursor. */
-export function Magnetic({ as: Tag = 'a', strength = 0.35, className = '', children, ...rest }) {
+export function Magnetic({ as: Tag = 'a', strength = 0.3, className = '', children, ...rest }) {
   const ref = useRef(null)
   useEffect(() => {
     const el = ref.current
@@ -55,8 +63,11 @@ export function Magnetic({ as: Tag = 'a', strength = 0.35, className = '', child
   return <Tag ref={ref} className={`magnetic ${className}`} {...rest}>{children}</Tag>
 }
 
-/** Primary / ghost call-to-action with a liquid fill hover. */
-export function Button({ href, onClick, variant = 'primary', icon = 'arrowUpRight', children, external, ...rest }) {
+/**
+ * Small editorial button: "LET'S TALK →".
+ * variant: 'red' (filled crimson) | 'dark' (black with crimson text) | 'line' (outlined)
+ */
+export function Button({ href, onClick, variant = 'red', icon = 'arrow', children, external, ...rest }) {
   const props = href
     ? { as: 'a', href, onClick, ...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {}) }
     : { as: 'button', type: 'button', onClick }
@@ -64,13 +75,13 @@ export function Button({ href, onClick, variant = 'primary', icon = 'arrowUpRigh
     <Magnetic {...props} className={`btn btn--${variant}`} data-cursor="hover" {...rest}>
       <span className="btn__fill" />
       <span className="btn__label">{children}</span>
-      {icon && <span className="btn__icon"><Icon name={icon} size={18} /></span>}
+      {icon && <span className="btn__icon"><Icon name={icon} size={15} /></span>}
     </Magnetic>
   )
 }
 
 /** Mouse-tracked 3D tilt for cards (desktop only). */
-export function useTilt(max = 8) {
+export function useTilt(max = 6) {
   const ref = useRef(null)
   useEffect(() => {
     const el = ref.current
@@ -98,27 +109,10 @@ export function useTilt(max = 8) {
   return ref
 }
 
-/** Spotlight that follows the cursor inside a container (sets --mx/--my). */
-export function useSpotlight() {
-  const ref = useRef(null)
-  useEffect(() => {
-    const el = ref.current
-    if (!el || isTouch()) return
-    const move = (e) => {
-      const cards = el.querySelectorAll('[data-spot]')
-      cards.forEach((c) => {
-        const r = c.getBoundingClientRect()
-        c.style.setProperty('--mx', `${e.clientX - r.left}px`)
-        c.style.setProperty('--my', `${e.clientY - r.top}px`)
-      })
-    }
-    el.addEventListener('mousemove', move)
-    return () => el.removeEventListener('mousemove', move)
-  }, [])
-  return ref
-}
-
 /** Returns true when a URL is set (empty / placeholder links are hidden). */
 export const hasLink = (url) => typeof url === 'string' && url.trim() !== '' && !url.startsWith('[')
 
 export const ext = { target: '_blank', rel: 'noopener noreferrer' }
+
+/** Absolute URL for a public asset (needed inside CSS custom properties). */
+export const assetUrl = (p) => new URL(p, document.baseURI).href

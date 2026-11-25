@@ -60,6 +60,28 @@ export const profile = {
 }
 
 /* ---------------------------------------------------------------------
+   EDITORIAL HEADLINES (the big statements on each section)
+   In every headline, `lead` is shown in cream and `accent` in red.
+   --------------------------------------------------------------------- */
+export const editorial = {
+  heroWord: 'RAJU',                       // giant red name in the hero
+  heroStack: ['Web.', 'Data.', 'Research.', 'AI.'],  // small stacked words (last one is red)
+  heroNote: 'Founder of Khoka Tech',
+  heroProof: '8 research projects · 600+ records',
+
+  approach: { label: 'The approach', lead: "Websites aren't about", accent: 'code.', sub: "It's about what they do for your business.", side: 'Research first. Build second. Deliver something useful and honest.' },
+  founder: { label: 'Khoka Tech', lead: "I don't just build websites.", accent: 'I built Khoka Tech.', tags: ['Websites', 'AI Chatbots', 'Business Sites', 'Digital Services'] },
+  services: { label: 'What I do', lead: 'Services that', accent: 'move work forward.' },
+  difference: { label: 'The difference', top: 'You have a business.', big: 'Good.', accent: 'Now get it working online.', quote: ["I don't just collect data.", 'I turn it into', 'something you can use.'], tags: ['Research', 'Web', 'AI', 'Data'], footnote: 'Because a website alone is the bare minimum.' },
+  skills: { label: 'The toolkit', lead: 'Skills built on', accent: 'real work.' },
+  work: { label: 'Selected work', lead: 'Things I', accent: 'have built.' },
+  research: { label: 'Data research', lead: 'Research that', accent: 'delivers.' },
+  method: { label: 'The method', quote: ['You bring the idea.', "I'll bring the solution."] },
+  proof: { label: 'The proof', lead: "Don't take my word", accent: 'for it.', sub: 'See the work, the profiles and the projects for yourself.' },
+  contact: { label: "Let's talk", lead: "Let's build something", accent: 'useful.' },
+}
+
+/* ---------------------------------------------------------------------
    ABOUT
    --------------------------------------------------------------------- */
 export const about = {
@@ -216,7 +238,7 @@ export const projects = [
     focus: ['Professional website development', 'AI-powered solutions', 'Business websites', 'Digital services'],
     tech: ['HTML', 'CSS', 'JavaScript', 'GitHub Pages'],
     image: '',
-    theme: ['#2f6bff', '#00e0ff'],
+    theme: ['#c41e24', '#ff5a4f'],
     motif: 'brand',
     links: { live: 'https://rsraju6734.github.io/khoka-tech/', code: '', extra: { label: 'Facebook Page', url: 'https://www.facebook.com/profile.php?id=61596665769551' } },
   },
@@ -232,7 +254,7 @@ export const projects = [
     focus: ['Product exploration', 'Price checks', 'Stock availability', 'Conversational shop interface'],
     tech: ['Python', 'Flask', 'HTML', 'CSS', 'JavaScript'],
     image: '',
-    theme: ['#7a3cff', '#2f6bff'],
+    theme: ['#8f1218', '#e8e2d6'],
     motif: 'chat',
     links: { live: '', code: 'https://github.com/rsraju6734/ai-shop-chatbot' },
   },
@@ -248,7 +270,7 @@ export const projects = [
     focus: ['Educational content', 'Chapter-based learning', 'Interactive learning experience', 'Student-friendly interface'],
     tech: ['HTML', 'CSS', 'JavaScript'],
     image: '',
-    theme: ['#00c2ff', '#00ffa3'],
+    theme: ['#c41e24', '#e8e2d6'],
     motif: 'learn',
     links: { live: 'https://rsraju6734.github.io/shikbolab/science_lab', code: '' },
   },
@@ -264,7 +286,7 @@ export const projects = [
     focus: ['Restaurant website', 'Digital menu', 'Order management', 'Restaurant business solutions'],
     tech: ['Web App', 'Render'],
     image: '',
-    theme: ['#ff6a3d', '#7a3cff'],
+    theme: ['#ff3b30', '#8f1218'],
     motif: 'menu',
     note: 'Hosted on a free Render plan — the first load can take up to a minute while the server wakes up.',
     links: { live: 'https://dineflow-ljlx.onrender.com/', code: '' },
@@ -281,7 +303,7 @@ export const projects = [
     focus: ['Watch product showcase', 'Shopping chatbot', 'Product information', 'Customer interaction'],
     tech: ['Web App', 'Vercel'],
     image: '',
-    theme: ['#c9a2ff', '#2f6bff'],
+    theme: ['#e8e2d6', '#c41e24'],
     motif: 'watch',
     links: { live: 'https://infinite-ticking.vercel.app/', code: '' },
   },
@@ -297,7 +319,7 @@ export const projects = [
     focus: ['Beauty-focused website experience', 'AI-assisted features', 'Modern responsive design'],
     tech: ['In planning'],
     image: '',
-    theme: ['#ff5fb7', '#7a3cff'],
+    theme: ['#ff5a4f', '#5a0b0f'],
     motif: 'glow',
     links: { live: '', code: '' }, // add the demo URL here when ready
   },

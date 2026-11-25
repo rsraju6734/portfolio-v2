@@ -1,41 +1,35 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { gsap, reducedMotion, lockScroll } from '../lib/motion'
-import { projects, socials } from '../config/site'
-import { Eyebrow, SplitText, Button, useTilt, hasLink, ext } from '../components/ui'
+import { gsap, reducedMotion, lockScroll, isTouch } from '../lib/motion'
+import { projects, socials, editorial } from '../config/site'
+import { SectionLabel, Statement, Button, hasLink, ext } from '../components/ui'
 import ProjectArt from '../components/ProjectArt'
 import Icon from '../components/Icon'
 
 const statusClass = (s) => `status status--${s.toLowerCase().replace(/\s+/g, '-')}`
 
-function ProjectCard({ project, onOpen, variant }) {
-  const tilt = useTilt(5)
+/** Editorial list row. Desktop: a preview floats after the cursor. Mobile: inline art. */
+function ProjectRow({ project, index, onOpen, onHover }) {
   return (
-    <article className={`pcard pcard--${variant}`} data-reveal="up">
+    <li className="prow" data-reveal>
       <button
         type="button"
-        className="pcard__inner"
-        ref={tilt}
+        className="prow__hit"
         onClick={() => onOpen(project)}
+        onMouseEnter={() => onHover(index)}
+        onFocus={() => onHover(index)}
         data-cursor="view"
         data-cursor-label="Open"
         aria-label={`Open details for ${project.title}`}
       >
-        <div className="pcard__media">
-          <ProjectArt project={project} large={variant === 'feature'} />
-          <span className="pcard__shine" aria-hidden="true" />
-        </div>
-        <div className="pcard__info">
-          <div className="pcard__top">
-            <span className="pcard__num">{project.number}</span>
-            <span className={statusClass(project.status)}>{project.status}</span>
-          </div>
-          <h3 className="pcard__title">{project.title}</h3>
-          <p className="pcard__cat mono-label">{project.category}</p>
-          <p className="pcard__sum">{project.summary}</p>
-          <span className="pcard__cta">View details <Icon name="arrow" size={16} /></span>
-        </div>
+        <span className="prow__n">{project.number}</span>
+        <span className="prow__title"><span className="prow__title-in">{project.title}</span></span>
+        <span className="prow__cat">{project.category}</span>
+        <span className={statusClass(project.status)}>{project.status}</span>
+        <span className="prow__arrow"><Icon name="arrowUpRight" size={22} /></span>
       </button>
-    </article>
+      <div className="prow__mobile-art" aria-hidden="true"><ProjectArt project={project} /></div>
+      <p className="prow__sum">{project.summary}</p>
+    </li>
   )
 }
 
@@ -60,7 +54,7 @@ function ProjectModal({ project, onClose }) {
     if (!reducedMotion()) {
       gsap.timeline()
         .fromTo('.pmodal__backdrop', { opacity: 0 }, { opacity: 1, duration: 0.4 })
-        .fromTo('.pmodal__panel', { clipPath: 'inset(8% 8% 8% 8% round 32px)', opacity: 0, y: 60 }, { clipPath: 'inset(0% 0% 0% 0% round 28px)', opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0)
+        .fromTo('.pmodal__panel', { clipPath: 'inset(0% 0% 100% 0%)', opacity: 0, y: 60 }, { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0)
         .fromTo('.pmodal__content > *', { y: 30, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.05, duration: 0.7, ease: 'expo.out' }, 0.25)
     }
     return () => {
@@ -79,19 +73,19 @@ function ProjectModal({ project, onClose }) {
         <div className="pmodal__media"><ProjectArt project={project} large /></div>
         <div className="pmodal__content">
           <div className="pmodal__meta">
-            <span className="mono-label">Project {project.number} · {project.category}</span>
+            <span className="label-sm">/ {project.number} — {project.category}</span>
             <span className={statusClass(project.status)}>{project.status}</span>
           </div>
-          <h3 id="pmodal-title" className="h-section">{project.title}</h3>
+          <h3 id="pmodal-title" className="pmodal__title">{project.title}</h3>
           <p className="pmodal__desc">{project.description}</p>
 
           <div className="pmodal__cols">
             <div>
-              <p className="mono-label">Focus</p>
+              <p className="label-sm">Focus</p>
               <ul className="pmodal__list">{project.focus.map((f) => <li key={f}><Icon name="check" size={16} />{f}</li>)}</ul>
             </div>
             <div>
-              <p className="mono-label">Technology</p>
+              <p className="label-sm">Technology</p>
               <div className="pmodal__tech">{project.tech.map((t) => <span key={t}>{t}</span>)}</div>
             </div>
           </div>
@@ -100,8 +94,8 @@ function ProjectModal({ project, onClose }) {
 
           <div className="pmodal__links">
             {hasLink(links.live) && <Button href={links.live} external icon="arrowUpRight">Open live site</Button>}
-            {hasLink(links.code) && <Button href={links.code} external variant="ghost" icon="github">View on GitHub</Button>}
-            {links.extra && hasLink(links.extra.url) && <Button href={links.extra.url} external variant="ghost" icon="facebook">{links.extra.label}</Button>}
+            {hasLink(links.code) && <Button href={links.code} external variant="line" icon="github">View on GitHub</Button>}
+            {links.extra && hasLink(links.extra.url) && <Button href={links.extra.url} external variant="line" icon="facebook">{links.extra.label}</Button>}
             {!hasLink(links.live) && !hasLink(links.code) && <p className="muted">A live link will be added here soon.</p>}
           </div>
         </div>
@@ -111,34 +105,65 @@ function ProjectModal({ project, onClose }) {
 }
 
 export default function Projects() {
+  const e = editorial.work
   const [open, setOpen] = useState(null)
+  const [hover, setHover] = useState(0)
   const close = useCallback(() => setOpen(null), [])
+  const list = useRef(null)
+  const float = useRef(null)
   const github = socials.find((s) => s.icon === 'github')
-  const [featured, ...rest] = projects
-  const variants = ['wide', 'tall', 'tall', 'wide', 'half']
+
+  // floating preview follows the cursor over the list (desktop)
+  useEffect(() => {
+    if (isTouch() || reducedMotion()) return
+    const el = list.current, f = float.current
+    const x = gsap.quickTo(f, 'x', { duration: 0.7, ease: 'power3.out' })
+    const y = gsap.quickTo(f, 'y', { duration: 0.7, ease: 'power3.out' })
+    const r = gsap.quickTo(f, 'rotation', { duration: 0.9, ease: 'power3.out' })
+    let lastX = 0
+    const move = (ev) => {
+      const b = el.getBoundingClientRect()
+      x(ev.clientX - b.left); y(ev.clientY - b.top)
+      r(Math.max(-8, Math.min(8, (ev.clientX - lastX) * 0.4))); lastX = ev.clientX
+    }
+    const enter = () => gsap.to(f, { scale: 1, opacity: 1, duration: 0.5, ease: 'expo.out' })
+    const leave = () => gsap.to(f, { scale: 0.6, opacity: 0, duration: 0.4, ease: 'power3.in' })
+    el.addEventListener('mousemove', move)
+    el.addEventListener('mouseenter', enter)
+    el.addEventListener('mouseleave', leave)
+    return () => {
+      el.removeEventListener('mousemove', move)
+      el.removeEventListener('mouseenter', enter)
+      el.removeEventListener('mouseleave', leave)
+    }
+  }, [])
+
   return (
     <section className="section work" id="work">
       <div className="container">
+        <SectionLabel n="06">{e.label}</SectionLabel>
         <div className="work__head">
-          <div>
-            <Eyebrow index="04">Featured work</Eyebrow>
-            <SplitText as="h2" className="h-display" text="Selected projects" />
-          </div>
-          <p className="muted work__intro" data-reveal>
-            Websites, chatbots and digital product concepts. Each card shows an honest status —
-            <span className="status status--live">Live</span> <span className="status status--demo">Demo</span> <span className="status status--coming-soon">Coming Soon</span>
+          <Statement lead={e.lead} accent={e.accent} size="xl" />
+          <p className="work__intro" data-reveal>
+            Websites, chatbots and digital product concepts — each with an honest status.
           </p>
         </div>
 
-        <ProjectCard project={featured} onOpen={setOpen} variant="feature" />
-        <div className="work__grid">
-          {rest.map((p, i) => <ProjectCard key={p.id} project={p} onOpen={setOpen} variant={variants[i % variants.length]} />)}
+        <div className="work__list-wrap" ref={list}>
+          <ol className="plist">
+            {projects.map((p, i) => <ProjectRow key={p.id} project={p} index={i} onOpen={setOpen} onHover={setHover} />)}
+          </ol>
+          <div className="pfloat" ref={float} aria-hidden="true">
+            {projects.map((p, i) => (
+              <div key={p.id} className={`pfloat__item ${i === hover ? 'is-on' : ''}`}><ProjectArt project={p} /></div>
+            ))}
+          </div>
         </div>
 
         {github && hasLink(github.url) && (
           <p className="work__more" data-reveal>
             More code on GitHub
-            <a href={github.url} {...ext} className="link-arrow" data-cursor="hover">github.com/{github.handle} <Icon name="arrowUpRight" size={16} /></a>
+            <a href={github.url} {...ext} className="link-red" data-cursor="hover">github.com/{github.handle} <Icon name="arrowUpRight" size={16} /></a>
           </p>
         )}
       </div>
